@@ -1,10 +1,10 @@
 let dynastyReign = {
-    "Dynasty A": "MXXXIV", // 1034   5 years
-    "Dynasty B": "MXXXIX", // 1039  7 years
-    "Dynasty C": "MXLVI", // 1046   10years
-    "Dynasty D": "MLVI", // 1056
+    "Dynasty A": "MXXXIV", // 1034 (5 years)
+    "Dynasty B": "MXXXIX", // 1039 (7 years)
+    "Dynasty C": "MXLVI", // 1046 (0 years)
+    "Dynasty D": "MLV", // 1005 (29y ears)
 };
-
+  
 function longestDynasty(dynastyReign) {
     if (Object.keys(dynastyReign).length === 0) {
       return "No Data";
@@ -14,10 +14,17 @@ function longestDynasty(dynastyReign) {
     let longestDynasty = "";
   
     for (let dynasty in dynastyReign) {
-      let endYear = convertYear(dynastyReign[dynasty]) + 1;
+      let endYear = convertYear(dynastyReign[dynasty]);
   
-      if (endYear > longestReign) {
-        longestReign = endYear;
+      if (typeof endYear !== "number") {
+        continue;
+      }
+  
+      let startYear = convertYear("M") + 1;
+      let reignYears = endYear - startYear;
+  
+      if (reignYears >= longestReign) {
+        longestReign = reignYears;
         longestDynasty = dynasty;
       }
     }
@@ -37,30 +44,26 @@ function convertYear(year) {
     };
   
     let result = 0;
-    let val = 0;
+    let prevValue = 0;
   
     for (let i = year.length - 1; i >= 0; i--) {
       let current = romanNumerals[year[i]];
   
       if (current === undefined) {
-        return "No Data";
+        return "Invalid";
       }
   
-      if (current >= val) {
+      if (current >= prevValue) {
         result += current;
       } else {
         result -= current;
       }
   
-      val = current;
+      prevValue = current;
     }
   
     return result;
 }
-
-
   
 console.log(longestDynasty(dynastyReign)); // Dynasty D
-
-
   
